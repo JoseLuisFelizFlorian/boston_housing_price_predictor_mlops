@@ -1,5 +1,5 @@
 ========= REPORTE DE ENTRENAMIENTO MLOPS =========
-Fecha de Ejecución: 2025-12-09 11:40:19
+Fecha de Ejecución: 2025-12-09 13:47:52
 Modelo Entrenado: Regresión Lineal
 
 --- RENDIMIENTO EN EL SET DE PRUEBA ---
