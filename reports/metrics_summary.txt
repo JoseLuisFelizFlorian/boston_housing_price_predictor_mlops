@@ -1,0 +1,27 @@
+========= REPORTE DE ENTRENAMIENTO MLOPS =========
+Fecha de Ejecución: 2025-12-08 22:20:17
+Modelo Entrenado: Regresión Lineal
+
+--- RENDIMIENTO EN EL SET DE PRUEBA ---
+R2 Score: 0.6688
+Mean Squared Error (MSE): 24.29
+Root Mean Squared Error (RMSE): 4.93
+
+--- ANÁLISIS DEL MODELO ---
+INTERCEPTO (Bias): 22.7965
+COEFICIENTES POR FEATURE:
+  CRIM      : -1.002135
+  ZN        : 0.696269
+  INDUS     : 0.278065
+  CHAS      : 0.718738
+  NOX       : -2.022319
+  RM        : 3.145240
+  AGE       : -0.176048
+  DIS       : -3.081908
+  RAD       : 2.251407
+  TAX       : -1.767014
+  PTRATIO   : -2.037752
+  B         : 1.129568
+  LSTAT     : -3.611658
+
+===================================================
