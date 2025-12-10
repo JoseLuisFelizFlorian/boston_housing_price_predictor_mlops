@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Boston Housing Price Predictor</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .feature-group { margin-bottom: 15px; border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="number"] { width: 90%; padding: 8px; border: 1px solid #ddd; border-radius: 3px; }
+        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        #result { margin-top: 20px; padding: 15px; border: 2px solid #28a745; border-radius: 5px; font-size: 1.2em; font-weight: bold; background-color: #e2f0e3; }
+    </style>
+</head>
+<body>
+
+    <h2>🏠 Predicción de Precio de Casas en Boston</h2>
+    <p>Ingresa los valores de las 13 características y presiona "Predecir".</p>
+
+    <form id="prediction-form">
+        <div class="feature-group">
+            <label for="CRIM">CRIM (Tasa de criminalidad):</label>
+            <input type="number" step="any" id="CRIM" value="0.03" required>
+        </div>
+        <div class="feature-group">
+            <label for="ZN">ZN (Proporción de zona residencial):</label>
+            <input type="number" step="any" id="ZN" value="20.0" required>
+        </div>
+        <div class="feature-group">
+            <label for="INDUS">INDUS (Proporción de negocios no minoristas):</label>
+            <input type="number" step="any" id="INDUS" value="2.0" required>
+        </div>
+        <div class="feature-group">
+            <label for="CHAS">CHAS (Variable ficticia de río Charles):</label>
+            <input type="number" step="any" id="CHAS" value="0.0" required>
+        </div>
+        <div class="feature-group">
+            <label for="NOX">NOX (Concentración de óxido nítrico):</label>
+            <input type="number" step="any" id="NOX" value="0.4" required>
+        </div>
+        <div class="feature-group">
+            <label for="RM">RM (Número promedio de habitaciones):</label>
+            <input type="number" step="any" id="RM" value="7.0" required>
+        </div>
+        <div class="feature-group">
+            <label for="AGE">AGE (Proporción de unidades construidas antes de 1940):</label>
+            <input type="number" step="any" id="AGE" value="30.0" required>
+        </div>
+        <div class="feature-group">
+            <label for="DIS">DIS (Distancia ponderada a centros de empleo):</label>
+            <input type="number" step="any" id="DIS" value="6.0" required>
+        </div>
+        <div class="feature-group">
+            <label for="RAD">RAD (Índice de accesibilidad a carreteras radiales):</label>
+            <input type="number" step="any" id="RAD" value="3.0" required>
+        </div>
+        <div class="feature-group">
+            <label for="TAX">TAX (Tasa de impuesto a la propiedad de valor total):</label>
+            <input type="number" step="any" id="TAX" value="200.0" required>
+        </div>
+        <div class="feature-group">
+            <label for="PTRATIO">PTRATIO (Proporción alumno-profesor por ciudad):</label>
+            <input type="number" step="any" id="PTRATIO" value="15.0" required>
+        </div>
+        <div class="feature-group">
+            <label for="B">B (Proporción de negros por ciudad):</label>
+            <input type="number" step="any" id="B" value="390.0" required>
+        </div>
+        <div class="feature-group">
+            <label for="LSTAT">LSTAT (% de estatus más bajo de la población):</label>
+            <input type="number" step="any" id="LSTAT" value="5.0" required>
+        </div>
+
+        <button type="submit">Predecir</button>
+    </form>
+
+    <div id="result">Esperando predicción...</div>
+
+    <script>
+        const form = document.getElementById('prediction-form');
+        const resultDiv = document.getElementById('result');
+
+        const FEATURES = [
+            'CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE', 'DIS', 'RAD', 
+            'TAX', 'PTRATIO', 'B', 'LSTAT'
+        ];
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            resultDiv.innerHTML = 'Cargando...';
+            
+            // Recolectar datos del formulario
+            const inputData = {};
+            FEATURES.forEach(feature => {
+                const element = document.getElementById(feature);
+                inputData[feature] = parseFloat(element.value);
+            });
+
+            try {
+                // Enviar solicitud POST a la API
+                const response = await fetch('/predict', { // El endpoint es /predict
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(inputData)
+                });
+                
+                const data = await response.json();
+
+                // Mostrar el resultado
+                if (response.ok) {
+                    const price = data.predicted_price_in_usd.toFixed(2);
+                    resultDiv.innerHTML =`✅ Predicción: $${price} Mil USD`;
+                    resultDiv.style.borderColor = '#28a745';
+                } else {
+                    resultDiv.innerHTML = `❌ **Error:** ${data.error || 'Algo salió mal.'}`;
+                    resultDiv.style.borderColor = '#dc3545';
+                }
+
+            } catch (error) {
+                resultDiv.innerHTML = `❌ **Error de Conexión:** ${error.message}`;
+                resultDiv.style.borderColor = '#dc3545';
+            }
+        });
+    </script>
+</body>
+</html>
