@@ -1,7 +1,7 @@
 import os
 import pickle
 import numpy as np
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 
 # Definición de la ruta base (el directorio raíz del proyecto donde reside app.py)
@@ -38,6 +38,12 @@ except FileNotFoundError:
     model = None
 
 
+# ---Web app para prueba de api ---
+@app.route('/app', methods=['GET'])
+def home():
+    """Sirve la plantilla HTML principal con el formulario."""
+    return render_template('index.html')
+
 # --- Ruta de Salud (Health Check) ---
 @app.route('/', methods=['GET'])
 def health_check():
@@ -46,7 +52,7 @@ def health_check():
         "endpoint_predict": "/predict (POST)",
         "features_required": FEATURE_COLUMNS, # Esto lista todas las 13 columnas
         "documentacion": "Consulte el archivo input_example.json o la documentación Swagger/Redoc para más detalles."
-    }), 200
+    }), 200 
 
 # --- Ruta de Predicción ---
 @app.route('/predict', methods=['POST'])
